@@ -5,17 +5,8 @@ beautifulsoup4
 youtube-transcript-api
 tiktoken
 google-generativeai
-
-
 requests
-
-
-
 google-search-results
-
-
-
-
 openai
 yt-dlp
 transformers

@@ -1,27 +1,24 @@
-# Use an official Python runtime as the base image
+# Base Python image
 FROM python:3.9-slim
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Install system dependencies (optional, for packages like numpy, torch, etc.)
+# System dependencies (optional but safe for transformers, torch, yt-dlp, etc.)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+    build-essential ffmpeg \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements and install Python dependencies
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
 COPY . .
 
-# Cloud Run expects the app to listen on port 8080
 EXPOSE 8080
 
-# Ensure Gradio listens on all interfaces and on port 8080
+# Set Gradio environment + USER_AGENT for SerpAPI
 ENV GRADIO_SERVER_NAME=0.0.0.0
 ENV GRADIO_SERVER_PORT=8080
+ENV USER_AGENT="KnightCorp-RPGSearchBot/1.0"
 
-# Run your app
 CMD ["python", "app/webui.py"]
