@@ -1,5 +1,7 @@
 import os
-from serpapi import GoogleSearch
+from google_search_results import GoogleSearch
+
+
 
 SERP_API_KEY = os.getenv("SERP_API_KEY") or "ce639f3b9f7bc841e1b063adf750314b4802c720075059764f67b11e73d263ba"
 

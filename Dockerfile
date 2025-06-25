@@ -1,25 +1,27 @@
 # Use an official Python runtime as the base image
 FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the requirements file into the container
+# Install system dependencies (optional, for packages like numpy, torch, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements and install Python dependencies
 COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Install the required dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code into the container
+# Copy the rest of the application
 COPY . .
 
-# Expose the port that the application will listen on
-EXPOSE 7860
+# Cloud Run expects the app to listen on port 8080
+EXPOSE 8080
 
-# Set the environment variable
-ENV GRADIO_SERVER_NAME="127.0.0.1"
+# Ensure Gradio listens on all interfaces and on port 8080
+ENV GRADIO_SERVER_NAME=0.0.0.0
+ENV GRADIO_SERVER_PORT=8080
 
-# Define the command to run the application
+# Run your app
 CMD ["python", "app/webui.py"]
-
-

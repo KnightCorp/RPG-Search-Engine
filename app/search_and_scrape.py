@@ -1,5 +1,7 @@
 import os
-from serpapi import GoogleSearch
+from google_search_results import GoogleSearch
+
+
 from summarizer import summarize_url  # Make sure summarizer.py has summarize_url(api_key) function
 
 # SerpAPI key
